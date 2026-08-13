@@ -196,6 +196,3 @@ Both env values reference each other's URLs, which don't exist until first deplo
 
 ---
 
-## 📄 License
-
-[MIT](LICENSE) © Pranav Mandani
