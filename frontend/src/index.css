@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+/*
+  BREACH design system
+  ---------------------
+  A forensic, editorial look: ink neutrals, a single signal-red accent (the
+  "redline"), sharp panels, and a faint evidence-grid backdrop. Deliberately
+  restrained — one accent, real texture, no rainbow gradients.
+  Token names are kept under the `claude-*` prefix so existing markup keeps
+  working; only their *values* define the new identity.
+*/
+
+:root {
+  /* Light — "paper dossier" */
+  --claude-bg: #f4f2ec;
+  --claude-sidebar: #e9e6dd;
+  --claude-border: rgba(24, 22, 20, 0.14);
+  --claude-border-strong: rgba(24, 22, 20, 0.26);
+  --claude-text-primary: #17150f;
+  --claude-text-secondary: #6a655c;
+  --claude-accent: #cf3336;
+  --claude-accent-hover: #b02629;
+  --claude-accent-bg: rgba(207, 51, 54, 0.08);
+  --claude-card: #fbfaf6;
+  --claude-selection: rgba(207, 51, 54, 0.22);
+  --claude-grid: rgba(24, 22, 20, 0.045);
+}
+
+.dark {
+  /* Dark — "ink & redline" (default) */
+  --claude-bg: #0d0d0f;
+  --claude-sidebar: #151519;
+  --claude-border: #26262d;
+  --claude-border-strong: #34343d;
+  --claude-text-primary: #f1efe9;
+  --claude-text-secondary: #97969f;
+  --claude-accent: #e5484d;
+  --claude-accent-hover: #f2585d;
+  --claude-accent-bg: rgba(229, 72, 77, 0.14);
+  --claude-card: #17171b;
+  --claude-selection: rgba(229, 72, 77, 0.32);
+  --claude-grid: rgba(255, 255, 255, 0.028);
+}
+
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-outfit: 'Space Grotesk', system-ui, sans-serif;   /* display / wordmark */
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  /* Bind BREACH variables to Tailwind utility colors */
+  --color-claude-bg: var(--claude-bg);
+  --color-claude-sidebar: var(--claude-sidebar);
+  --color-claude-border: var(--claude-border);
+  --color-claude-border-strong: var(--claude-border-strong);
+  --color-claude-text-primary: var(--claude-text-primary);
+  --color-claude-text-secondary: var(--claude-text-secondary);
+  --color-claude-accent: var(--claude-accent);
+  --color-claude-accent-hover: var(--claude-accent-hover);
+  --color-claude-accent-bg: var(--claude-accent-bg);
+  --color-claude-card: var(--claude-card);
+}
+
+body {
+  @apply bg-claude-bg text-claude-text-primary min-h-screen antialiased transition-colors duration-300;
+  selection-background-color: var(--claude-selection);
+}
+
+/* Evidence-grid backdrop — fine, low-contrast, replaces the blurry AI-slop glows */
+.breach-grid {
+  background-image:
+    linear-gradient(var(--claude-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--claude-grid) 1px, transparent 1px);
+  background-size: 32px 32px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 30%, transparent 100%);
+          mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 30%, transparent 100%);
+}
+
+/* A single restrained accent wash near the header, not a floating orb */
+.breach-accent-wash {
+  background: radial-gradient(60% 100% at 50% 0%, var(--claude-accent-bg) 0%, transparent 70%);
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar { width: 7px; height: 7px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  @apply bg-claude-border-strong rounded-full;
+}
+::-webkit-scrollbar-thumb:hover { @apply bg-claude-text-secondary/50; }
+
+/* Panels — squarer, sharper "dossier" cards */
+.glass-panel {
+  @apply bg-claude-card border border-claude-border rounded-xl;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 8px 24px -18px rgba(0, 0, 0, 0.4);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.glass-panel-hover {
+  @apply hover:border-claude-border-strong;
+}
+
+/* Monospace forensic label — small caps, tracked out */
+.breach-label {
+  @apply font-mono text-[10px] uppercase tracking-[0.18em] text-claude-text-secondary;
+}
+
+/* Section rule with a leading accent tick */
+.breach-rule::before {
+  content: "";
+  @apply inline-block h-3 w-[3px] rounded-full bg-claude-accent mr-2 align-middle;
+}
+
+/* Markdown output */
+.markdown-content p {
+  @apply mb-4 leading-relaxed text-claude-text-primary;
+}
+.markdown-content ul, .markdown-content ol {
+  @apply mb-4 pl-6 list-disc leading-relaxed space-y-1 text-claude-text-primary;
+}
+.markdown-content li strong {
+  @apply text-claude-accent font-semibold;
+}
+.markdown-content code {
+  @apply px-1.5 py-0.5 rounded bg-claude-sidebar font-mono text-sm text-claude-accent;
+}
+.markdown-content blockquote {
+  @apply pl-4 border-l-2 border-claude-accent bg-claude-sidebar py-1 pr-2 rounded-r my-4 italic text-claude-text-secondary;
+}

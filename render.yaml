@@ -1,0 +1,35 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+# Deploy: Render dashboard -> New -> Blueprint -> select this repo.
+# Render finds this file automatically and provisions the backend below.
+# Runs natively — Render installs requirements.txt and runs uvicorn directly.
+#
+# The frontend is deployed separately on Vercel (see README's Deployment section) —
+# Vite bakes VITE_API_URL in at build time, and Vercel's zero-config static/SPA
+# hosting for a Vite project is simpler than wiring that through here.
+
+services:
+  - type: web
+    name: breach-backend
+    env: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: ENV
+        value: production
+      - key: DB_NAME
+        value: rag_pdf_db
+      - key: LLM_PROVIDER
+        value: groq
+      - key: CORS_ORIGINS
+        value: '["https://breach.vercel.app"]' # update after your Vercel deploy is live
+      - key: MONGODB_URI
+        sync: false # paste your MongoDB Atlas connection string in the Render dashboard
+      - key: GROQ_API_KEY
+        sync: false # https://console.groq.com/
+      - key: TAVILY_API_KEY
+        sync: false # https://tavily.com
